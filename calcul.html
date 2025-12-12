@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<title>Calculatrice Arabe</title>
+
+<style>
+body {
+    font-family: Arial, sans-serif;
+    background:#f5f5f5;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+}
+.calculator {
+    background:#222;
+    padding:20px;
+    border-radius:15px;
+    width:260px;
+}
+.display {
+    background:#fff;
+    height:60px;
+    margin-bottom:15px;
+    border-radius:10px;
+    font-size:2rem;
+    text-align:right;
+    padding:10px;
+    overflow:hidden;
+}
+button {
+    width:60px;
+    height:60px;
+    margin:5px;
+    font-size:1.5rem;
+    border:none;
+    border-radius:10px;
+}
+.n {
+    background:#333;
+    color:white;
+}
+.op {
+    background:#ff9800;
+    color:white;
+}
+.eq {
+    background:#4caf50;
+    color:white;
+}
+</style>
+</head>
+
+<body>
+
+<div class="calculator">
+    <div class="display" id="screen">٠</div>
+
+    <div>
+        <button class="n">١</button>
+        <button class="n">٢</button>
+        <button class="n">٣</button>
+        <button class="op">+</button>
+    </div>
+    <div>
+        <button class="n">٤</button>
+        <button class="n">٥</button>
+        <button class="n">٦</button>
+        <button class="op">-</button>
+    </div>
+    <div>
+        <button class="n">٧</button>
+        <button class="n">٨</button>
+        <button class="n">٩</button>
+        <button class="op">×</button>
+    </div>
+    <div>
+        <button class="n">٠</button>
+        <button class="op">÷</button>
+        <button class="eq">=</button>
+        <button class="op">C</button>
+    </div>
+</div>
+
+<script>
+const arabicToLatin = {
+    '٠':'0','١':'1','٢':'2','٣':'3','٤':'4',
+    '٥':'5','٦':'6','٧':'7','٨':'8','٩':'9'
+};
+
+const latinToArabic = {
+    '0':'٠','1':'١','2':'٢','3':'٣','4':'٤',
+    '5':'٥','6':'٦','7':'٧','8':'٨','9':'٩'
+};
+
+function convertToLatin(str){
+    return str.replace(/[٠-٩]/g, d => arabicToLatin[d]);
+}
+function convertToArabic(str){
+    return str.replace(/[0-9]/g, d => latinToArabic[d]);
+}
+
+const screen = document.getElementById("screen");
+
+document.querySelectorAll("button").forEach(btn=>{
+    btn.addEventListener("click", ()=>{
+        let v = btn.textContent;
+
+        if(v === "C"){
+            screen.textContent = "٠";
+            return;
+        }
+
+        if(v === "="){
+            let expr = convertToLatin(screen.textContent);
+            expr = expr.replace(/×/g,"*").replace(/÷/g,"/");
+            let result = eval(expr).toString();
+            screen.textContent = convertToArabic(result);
+            return;
+        }
+
+        if(screen.textContent === "٠") screen.textContent = "";
+
+        screen.textContent += v;
+    });
+});
+</script>
+
+</body>
+</html>
